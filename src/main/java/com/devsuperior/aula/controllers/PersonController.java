@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.devsuperior.aula.dto.PersonDepartmentDto;
+import com.devsuperior.aula.dto.PersonDto;
 import com.devsuperior.aula.service.PersonService;
 
 @RestController
@@ -22,6 +23,15 @@ public class PersonController {
     @PostMapping
     public ResponseEntity<PersonDepartmentDto> insert(@RequestBody PersonDepartmentDto dto) {
         dto = service.insert(dto);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(dto.getId()).toUri();
+
+        return ResponseEntity.created(uri).body(dto);
+    }
+
+    @PostMapping("/new-mode")
+    public ResponseEntity<PersonDto> insert(@RequestBody PersonDto dto) {
+        dto = service.newInsert(dto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(dto.getId()).toUri();
 
